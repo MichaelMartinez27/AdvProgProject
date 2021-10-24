@@ -1,7 +1,7 @@
 # AdvProgProject
 ## Team members
 Jordan Correy  
-Sallah Sadique  
+Sallah Saddiqui  
 Michael Martinez  
 
 ## Description
