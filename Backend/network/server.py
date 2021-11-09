@@ -1,12 +1,5 @@
-from threading import Thread
-from time import sleep
 import socket
-import json
-import re
-
-from Backend.storage.StorageInterface import StorageInterface
-
-BUFFER_SIZE = 1024
+from Backend.network.connection_handler import ConnectionHandler
 
 class Server():
     def __init__(self, addr: str, port: int) -> None:
@@ -24,40 +17,13 @@ class Server():
                 self.sock.listen(1)
                 conn, address = self.sock.accept()
                 new_connection = ConnectionHandler(conn, address)
+                new_connection.daemon = True
                 new_connection.start()
-
         except KeyboardInterrupt:
             print("ERR|Closing server...")
         finally:
             self.sock.close()
             print("LOG|Server closed...")
-
-class ConnectionHandler(Thread):
-    def __init__(self,conn,addr):
-        Thread.__init__(self)
-        self.conn = conn
-        self.addr = addr
-        self.storage = StorageInterface()
-        print("LOG|New connection added...")
-
-    def run(self):
-        try:
-            print(f"LOG|Connected by {self.addr}...")
-            data = None
-            while True:
-                data = self.conn.recv(BUFFER_SIZE)
-                if not data: break
-                data = re.findall(r"{.+}",data.decode('utf-8'))[-1]
-                if not data: break
-                data_dict = json.loads(data)
-                print("CON|Data:\t", data_dict)
-                sleep(10)
-                self.conn.sendall(b"DONE")
-        except:
-            print("ERR|closing connection due to error...")
-        finally:
-            self.conn.close()
-            print("LOG|connection closed...")
 
 
 
