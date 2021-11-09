@@ -64,9 +64,17 @@ public class Client {
 
     static public void main(String[] args) {
         Request request = new Request("1","RETRIEVE","user","1234");
-        Client c = new Client("127.0.0.1", 3920, request);
-        c.send();
+        Client c1 = new Client("127.0.0.1", 3920, request);
+        c1.send();
+        request = new Request("2","CREATE","organization","54");
+        Client c2 = new Client("127.0.0.1",3920,request);
+        c2.send();
+        request = new Request("2","DELETE","organization","08");
+        Client c3 = new Client("127.0.0.1",3920,request);
+        c3.send();
+        request = new Request("2","UPDATE","project","2347980");
+        Client c4 = new Client("127.0.0.1",3920,request);
+        c4.send();
     }
 
-    
 }
