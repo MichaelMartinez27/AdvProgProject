@@ -2,12 +2,12 @@
 
 class StorageInterface:
     def __init__(self, request:dict):
-        request = request
-        request_handler = {
-            "CREATE": self.create_element(),
-            "RETRIEVE": self.retrieve_element(),
-            "UPDATE": self.update_element(),
-            "DELETE": self.delete_element()
+        self.request = request
+        self.request_handler = {
+            "CREATE": self.create_element,
+            "RETRIEVE": self.retrieve_element,
+            "UPDATE": self.update_element,
+            "DELETE": self.delete_element
         }
 
     def request_parser(self):
@@ -17,17 +17,21 @@ class StorageInterface:
         else:
             return [{"error":"Unknown query action"}]
 
-    def create_element():
+    def create_element(self):
+
         return [{"result":"creation successful"}]
 
-    def retrieve_element():
+    def retrieve_element(self):
+
         return [{
             "elementUID":"",
             "requestedInfo":{}
             }]
 
-    def update_element():
+    def update_element(self):
+
         return [{"result":"update successful"}]
 
-    def delete_element():
+    def delete_element(self):
+
         return [{"result":"deletion successful"}]

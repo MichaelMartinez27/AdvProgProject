@@ -12,7 +12,6 @@ class ConnectionHandler(Thread):
         Thread.__init__(self)
         self.conn = conn
         self.addr = addr
-        self.storage = StorageInterface()
         print("LOG|New connection added...")
 
     def run(self):
@@ -23,15 +22,19 @@ class ConnectionHandler(Thread):
             if not data: return
             data = re.findall(r"{.+}",data.decode('utf-8'))[-1]
             if not data: return
-            data_dict = json.loads(data)
-            print("\nRCV|Data:\t", data_dict)
+            request = json.loads(data)
+            print("LOG|Recieved data:\n", request)
+            storage = StorageInterface(request)
+            response = storage.request_parser()
+            response = bytes(json.dumps(response),encoding="utf-8")
             sleep(2)
-            self.conn.sendall(b"DONE")
-            print(f"Sent back to client: DONE")
+            self.conn.sendall(response)
+            print(f"LOG|Sent back to client: {response}")
         except KeyboardInterrupt:
             print("LOG|Goodbye!")
-        except:
+        except IOError as e:
             print("ERR|closing connection due to error...")
+            print("*"*50, e, "*"*50, sep = "\n")
         finally:
             self.conn.close()
             print("LOG|connection closed...")
