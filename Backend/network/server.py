@@ -13,12 +13,15 @@ class Server():
             print(f"LOG|Running on {self.addr}:{self.port}...")
             self.sock.bind((self.addr,self.port))
             while True:
-                print("\nLOG|Waiting for client request...")
+                print("----------",
+                      "LOG|Waiting for client request...",
+                      sep="\n")
                 self.sock.listen(1)
                 conn, address = self.sock.accept()
                 new_connection = ConnectionHandler(conn, address)
                 new_connection.daemon = True
                 new_connection.start()
+                new_connection.join()
         except KeyboardInterrupt:
             print("ERR|Closing server...")
         finally:
