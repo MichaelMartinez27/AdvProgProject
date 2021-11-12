@@ -75,6 +75,18 @@ public class Request {
         return newInfo;
     }
 
+    public String getNewInfoString() {
+        if(!this.newInfo.isEmpty()) {
+            StringBuilder newInfoAsString = new StringBuilder("{");
+            for (String key : this.newInfo.keySet()) {
+                newInfoAsString.append('"').append(key).append("\":\"").append(this.newInfo.get(key)).append("\",");
+            }
+            newInfoAsString.replace(newInfoAsString.length() - 1, newInfoAsString.length(), "}");
+            return newInfoAsString.toString();
+        }
+        return "{}";
+    }
+
     public void setNewInfo(HashMap<String, String> newInfo) {
         this.newInfo = newInfo;
     }
@@ -88,7 +100,7 @@ public class Request {
                 "\"elementUID\":\"" + elementUID + "\"," +
                 "\"filters\":" + Arrays.toString(filters) + ',' +
                 "\"requestedInfo\":" + requestedInfo + ',' +
-                "\"newInfo\":" + newInfo +
+                "\"newInfo\":" + this.getNewInfoString() +
                 '}';
     }
 }
