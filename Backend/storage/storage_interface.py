@@ -1,4 +1,4 @@
-import Backend.storage.file_storage as fs
+from  Backend.storage.file_storage import FileStorage as store
 
 class StorageInterface:
     def __init__(self, request:dict):
@@ -9,7 +9,7 @@ class StorageInterface:
             "UPDATE": self.update_element,
             "DELETE": self.delete_element
         }
-        self.storage = fs.FileStorage("Backend/storage/data/","0001")
+        self.storage = store("Backend/storage/data/",self.request.get("userUID",'0000'))
 
     def request_parser(self):
         action = self.request.get("queryAction").upper()
