@@ -50,21 +50,55 @@ class FileStorage:
         else:
             raise PermissionError("user does not have permission to retrieve element")
 
-    # TODO: implement update by:
-    # 1. retrieving element,
-    # 2. converting to dict, 
-    # 3. update dict,
-    # 4. re-save updated dict
     def update(self, element:str, element_uid:str, element_info:dict):
-        if element == "PROJECT" and self.user in self._getProject(element_uid).get("editors",[]):
-            return "project updated"
-        if element == "TASK" and self.user in self._getProject(element_uid).get("editors",[]):
-            return "task for project updated"
-        if element == "USER" and (self.user == element_uid or self._getUser(self.user).get("admin",False)):
-            return "user updated"
-        if element == "ORGANIZATION" and self.user in self._getOrganization(element_uid).get("editors",[]):
-            return "org updated"
-        raise NotImplementedError
+        if element == "USER":
+            if self.user == element_uid or self._getUser(self.user).get("admin",False):
+                if self._updateUser(element_uid, element_info):
+                    return "user updated"
+                raise NotImplementedError("user does not exsist")
+            else:
+                raise PermissionError("user does not have permission to update element")
+        if element == "ORGANIZATION":
+            org = self._getOrganization(element_uid)
+            if org:
+                if self.user in org.get("editors",[]):
+                    if self._updateOrganization(element_uid,element_info):
+                        return "organization updated"
+                    raise NotImplementedError("could not update organization")
+                else:
+                    raise PermissionError("user does not have permission to update element")
+            else:
+                raise NotImplementedError("organization does not exsist")
+        elif element == "PROJECT":
+            proj = self._getProject(element_uid)
+            if proj:
+                if self.user in proj.get("editors",[]):
+                    if self._updateProject(element_uid, element_info):
+                        return "project updated"
+                    raise NotImplementedError("could not update project")
+                else:
+                    raise PermissionError("user does not have permission to update element")
+            else:
+                raise NotImplementedError("project does not exsist")
+        # TODO: update task from project by
+        # 1. open project,
+        # 2. convert to dict,
+        # 3. iterate through tasks,
+        # 4. if task unique id matches updateTask()
+        # 5. resave project without task
+        elif element == "TASK":
+            proj = self._getProject("-".join(element_uid.split("-")[:2]))
+            if proj:
+                if self.user in proj.get("editors",[]):
+                    if self._updateTask(element_uid):
+                        return "project updated"
+                    raise NotImplementedError("could not update task")
+                else:
+                    raise PermissionError("user does not have permission to update element")
+            else:
+                raise NotImplementedError("project does not exsist")
+        else:
+            raise AttributeError("element does not exsist")
 
 
     def delete(self, element:str, element_uid:dict):
@@ -122,33 +156,45 @@ class FileStorage:
         return [user.replace(".json","") for user in users]
 
     def _createUser(self, user_id:str, user_info: dict):
-        with open(f'{self.file_storage_dir}users/{user_id}.json',
-                  mode="w",
-                  encoding='utf-8') as file:
-            json.dump(user_info, file)
+        try:
+            with open(f'{self.file_storage_dir}users/{user_id}.json',
+                    mode="w",
+                    encoding='utf-8') as file:
+                json.dump(user_info, file)
+            return True
+        except:
+            return False
 
     def _createOrganization(self, org_id:str, creator_id:str, org_info: dict):
-        if not os.path.exists(f'{self.file_storage_dir}organizations/{org_id}'):
-            os.makedirs(f'{self.file_storage_dir}organizations/{org_id}')
-            os.makedirs(f'{self.file_storage_dir}organizations/{org_id}/projects')
-        with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
-                  mode="w",
-                  encoding="utf-8") as file: 
-            json.dump([creator_id], file)
-        with open(f'{self.file_storage_dir}organizations/{org_id}/info.json',
-                  mode="w",
-                  encoding='utf-8') as file:
-            json.dump(org_info, file)
+        try:
+            if not os.path.exists(f'{self.file_storage_dir}organizations/{org_id}'):
+                os.makedirs(f'{self.file_storage_dir}organizations/{org_id}')
+                os.makedirs(f'{self.file_storage_dir}organizations/{org_id}/projects')
+            if creator_id:
+                with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                        mode="w",
+                        encoding="utf-8") as file: 
+                    json.dump([creator_id], file)
+            with open(f'{self.file_storage_dir}organizations/{org_id}/info.json',
+                    mode="w",
+                    encoding='utf-8') as file:
+                json.dump(org_info, file)
+            return True
+        except:
+            return False
 
     def _createProject(self, proj_id:str, proj_info:str):
-        org_id, proj_id = tuple(proj_id.split("-"))
-        if not os.path.exists(f'{self.file_storage_dir}organizations/{org_id}'):
+        try:
+            org_id, proj_id = tuple(proj_id.split("-"))
+            if not os.path.exists(f'{self.file_storage_dir}organizations/{org_id}'):
+                return False
+            with open(f'{self.file_storage_dir}organizations/{org_id}/projects/{proj_id}.json',
+                        mode="w",
+                        encoding="utf-8") as file:
+                json.dump(proj_info, file)
+            return True
+        except:
             return False
-        with open(f'{self.file_storage_dir}organizations/{org_id}/projects/{proj_id}.json',
-                    mode="w",
-                    encoding="utf-8") as file:
-            json.dump(proj_info, file)
-        return True
 
     def _getUser(self, user_id: str):
         try:
@@ -178,17 +224,67 @@ class FileStorage:
         except FileNotFoundError:
             return {}
 
-    def _updateUser(self):
-        # TODO:
-        pass
+    def _updateUser(self, user_id: str, user_update_info: dict):
+        user = self._getUser(user_id)
+        if user:
+            for key, val in user_update_info.items():
+                if key != "userUID":
+                    user[key] = val
+            if self._createUser(user_id, user):
+                return True
+        return False
 
-    def _updateOrganization(self):
-        # TODO:
-        pass
+    def _updateOrganization(self, org_id: str, org_update_info: dict):
+        org = self._getOrganization(org_id)
+        if org:
+            for key, val in org_update_info.items():
+                if key == "user":
+                    with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                    mode="r",
+                    encoding="utf-8") as file:
+                        users = json.load(file)
+                        users.append(val)
+                        with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                        mode="w",
+                        encoding="utf-8") as file:
+                            json.dump(users,file)
+                elif key == "users":
+                    with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                    mode="r",
+                    encoding="utf-8") as file:
+                        users = json.load(file)
+                        users += val
+                        with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                        mode="w",
+                        encoding="utf-8") as file:
+                            json.dump(users,file)
+                elif key != "organizationUID":
+                    if type(key) == list:
+                        org[key] = list(org[key]) + val
+                    elif type(org.get(key)) == list:
+                        org[key] += [val]
+                    else:
+                        org[key] = val
+            if self._createOrganization(org_id, None, org):
+                return True
+        return False
 
-    def _updateProject(self):
-        # TODO:
-        pass
+    def _updateProject(self, proj_id: str, proj_update_info: str):
+        proj = self._getProject(proj_id)
+        if proj:
+            for key, val in proj_update_info.items():
+                if key != "projectUID":
+                    if type(key) == list:
+                        proj[key] = list(proj[key]) + val
+                    elif type(proj.get(key)) == list:
+                        print("DEBUG|","in key list")
+                        proj[key] += [val]
+                        print("DEBUG|",proj[key])
+                    else:
+                        proj[key] = val
+            if self._createProject(proj_id, proj):
+                return True
+        return False
 
     def _updateTask(self):
         # TODO:
@@ -221,44 +317,61 @@ class FileStorage:
         pass
 
 
-if __name__ == '__main__':
-        store = FileStorage("Backend/storage/data/","1111")
-        print("LOGGED IN | 1111")
-        print(store.create("USER","0001",{"first":"Michael","last":"Martinez","admin":True}))
-        store = FileStorage("Backend/storage/data/","0001")
-        print("LOGGED IN | 0001")
-        print(store.create("ORGANIZATION","1234",{"name":"CompanyX","editors":["0001"]}))
-        print(store.create("USER","0002",{"first":"John","last":"Smith","admin":True}))
-        print(store.create("ORGANIZATION","5678",{"name":"CompanyY","editors":["0001","0002"]}))
-        print(store.create("PROJECT","1234-4321",{"title":"ProjectX","editors":["0001","0001"]}))
-        print(store.create("PROJECT","5678-4321",{"title":"ProjectA","editors":["0001","0002"]}))
-        print(store.create("PROJECT","5678-8765",{"title":"ProjectB","editors":["0002"]}))
-        print(store.retrieve("USER","0001"))
-        print(store.retrieve("ORGANIZATION","1234",))
-        print(store.retrieve("PROJECT","1234-4321"))
+def test():
+    store = FileStorage("Backend/storage/data/","1111")
+    print("LOGGED IN | 1111")
+    print(store.create("USER","0001",{"first":"Michael","last":"Martinez","admin":True}))
+    store = FileStorage("Backend/storage/data/","0001")
+    print("LOGGED IN | 0001")
+    print(store.update("USER","0001",{"email":"michael.martinez@email.com"}))
+    print(store.create("ORGANIZATION","1234",{"name":"CompanyX","editors":["0001"]}))
+    print(store.retrieve("ORGANIZATION","1234"))
+    print(store.create("USER","0002",{"first":"John","last":"Smith","admin":True}))
+    print(store.retrieve("USER","0002"))
+    print(store.update("USER","0002",{"email":"john.smith@email.com"}))
+    print(store.retrieve("USER","0002"))
+    print(store.create("ORGANIZATION","5678",{"name":"CompanyY","editors":["0001","0002"]}))
+    print(store.create("PROJECT","1234-4321",{"title":"ProjectX","editors":["0001","0001"]}))
+    print(store.create("PROJECT","5678-4321",{"title":"ProjectA","editors":["0001","0002"]}))
+    print(store.create("PROJECT","5678-8765",{"title":"ProjectB","editors":["0002"]}))
+    print(store.retrieve("USER","0001"))
+    print(store.retrieve("ORGANIZATION","1234",))
+    print(store.retrieve("PROJECT","1234-4321"))
+    print(store.update("PROJECT","1234-4321",{"description":"This is a cool project"}))
+    print(store.retrieve("PROJECT","1234-4321"))
+    print(store.retrieve("PROJECT","5678-4321"))
+    print(store.update("PROJECT","5678-4321",{"description":"Another project.. blah","goals":["Do something","do something else"]}))
+    print(store.retrieve("PROJECT","5678-4321"))
+    print(store.delete("PROJECT","5678-4321"))
+    try:
         print(store.retrieve("PROJECT","5678-4321"))
-        print(store.delete("PROJECT","5678-4321"))
-        try:
-            print(store.retrieve("PROJECT","5678-4321"))
-            print("** Error should have been raised **")
-        except NotImplementedError as nie:
-            print("Error correctly raised |",nie)
-        store = FileStorage("Backend/storage/data/","0002")
-        print("LOGGED IN | 0002")
-        print(store.delete("PROJECT","5678-8765"))
-        print(store.delete("ORGANIZATION","5678"))
-        store = FileStorage("Backend/storage/data/","0001")
-        print("LOGGED IN | 0001")
-        print(store.create("USER","0003",{"first":"John","last":"Doe","admin":False}))
-        print(store.delete("USER","0002"))
-        store = FileStorage("Backend/storage/data/","0003")
-        print("LOGGED IN | 0003")
-        try:
-            print(store.delete("USER","0001"))
-            print("** Error should have been raised **")
-        except PermissionError as pe:
-            print("Error correctly raised |",pe)
-        store = FileStorage("Backend/storage/data/","0001")
-        print("LOGGED IN | 0001")
-        print(store.delete("ORGANIZATION","1234"))
-        print(store.delete("USER","0003"))
+        print("*** Error should have been raised ***")
+    except NotImplementedError as nie:
+        print("Error correctly raised |",nie)
+    store = FileStorage("Backend/storage/data/","0002")
+    print("LOGGED IN | 0002")
+    print(store.delete("PROJECT","5678-8765"))
+    print(store.delete("ORGANIZATION","5678"))
+    store = FileStorage("Backend/storage/data/","0001")
+    print("LOGGED IN | 0001")
+    print(store.create("USER","0003",{"first":"John","last":"Doe","admin":False}))
+    print(store.update("USER","0003",{"email":"jd@hotmail.com","username":"johnny-boi"}))
+    print(store.retrieve("USER","0003"))
+    print(store.update("ORGANIZATION","1234",{"users":["0002","0003"],"editors":"0003"}))
+    print(store.retrieve("ORGANIZATION","1234"))
+    print(store.delete("USER","0002"))
+    store = FileStorage("Backend/storage/data/","0003")
+    print("LOGGED IN | 0003")
+    try:
+        print(store.delete("USER","0001"))
+        print("*** Error should have been raised ***")
+    except PermissionError as pe:
+        print("Error correctly raised |",pe)
+    store = FileStorage("Backend/storage/data/","0001")
+    print("LOGGED IN | 0001")
+    # print(store.delete("ORGANIZATION","1234"))
+    print(store.delete("USER","0003"))
+
+
+if __name__ == '__main__':
+    test()
