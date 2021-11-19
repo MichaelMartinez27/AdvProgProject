@@ -179,9 +179,19 @@ class FileStorage:
             return {}
 
     def _updateUser(self):
+        # TODO:
         pass
 
     def _updateOrganization(self):
+        # TODO:
+        pass
+
+    def _updateProject(self):
+        # TODO:
+        pass
+
+    def _updateTask(self):
+        # TODO:
         pass
 
     def _deleteUser(self, user_id: str):
@@ -205,6 +215,10 @@ class FileStorage:
             os.remove(projfile)
             return True
         return False
+
+    def _deleteTask(self,task_id: str):
+        # TODO:
+        pass
 
 
 if __name__ == '__main__':
