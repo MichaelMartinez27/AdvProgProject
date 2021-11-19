@@ -19,6 +19,8 @@ class StorageInterface:
             return [{"error":"Unknown query action"}]
 
     def create_element(self):
+        # TODO: integrate element classes to fill in gaps of passed in
+        # data and standardize elements before creating
         try:
             element = self.request.get("queryElement", "")
             element_id = self.request.get("elementUID", "")
@@ -31,16 +33,20 @@ class StorageInterface:
             return [{"result": f'invalid permissions to edit "{element}"'}]
 
     def retrieve_element(self):
-
+        # TODO: implement storage to get element
+        # if element ID is "ALL" get all users and 
+        # iterate to get each
         return [{
             "elementUID":"",
             "requestedInfo":{}
             }]
 
     def update_element(self):
-
+        # TODO: either retrieve element, update, and resave
+        # or just pass the updated data
         return [{"result":"update successful"}]
 
     def delete_element(self):
-
+        # TODO: implement storage element deletion, 
+        # nothing special here
         return [{"result":"deletion successful"}]

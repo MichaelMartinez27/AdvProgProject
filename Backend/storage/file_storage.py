@@ -29,7 +29,7 @@ class FileStorage:
         else:
             raise PermissionError("user does not have permission to create element")
 
-    def retrieve(self, element:str, element_uid:dict):
+    def retrieve(self, element:str, element_uid:str):
         if element == "PROJECT":
             project = self._getProject(element_uid)
             if project:
@@ -226,6 +226,7 @@ if __name__ == '__main__':
         print(store.delete("PROJECT","5678-4321"))
         try:
             print(store.retrieve("PROJECT","5678-4321"))
+            print("** Error should have been raised **")
         except NotImplementedError as nie:
             print("Error correctly raised |",nie)
         store = FileStorage("Backend/storage/data/","0002")
@@ -240,7 +241,7 @@ if __name__ == '__main__':
         print("LOGGED IN | 0003")
         try:
             print(store.delete("USER","0001"))
-            print("Error should have been raised")
+            print("** Error should have been raised **")
         except PermissionError as pe:
             print("Error correctly raised |",pe)
         store = FileStorage("Backend/storage/data/","0001")

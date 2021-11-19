@@ -8,7 +8,7 @@ BUFFER_SIZE = 1024
 
 
 class ConnectionHandler(Thread):
-    def __init__(self,conn,addr):
+    def __init__(self, conn, addr):
         Thread.__init__(self)
         self.conn = conn
         self.addr = addr
