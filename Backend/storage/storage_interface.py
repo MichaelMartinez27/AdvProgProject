@@ -40,7 +40,7 @@ class StorageInterface:
             return [{"result": f'unable to {action} {element}:"{element_id}"'}]
 
     def retrieve_element(self):
-        # TODO: implement storage to get element
+        # TODO:
         # if element ID is "ALL" get all users and 
         # iterate to get each
         try:
@@ -58,8 +58,6 @@ class StorageInterface:
             return [{"result": f'unable to {action} {element}:"{element_id}"'}]
 
     def update_element(self):
-        # TODO: either retrieve element, update, and resave
-        # or just pass the updated data
         try:
             element = self.request.get("queryElement", "")
             element_id = self.request.get("elementUID", "")
@@ -77,8 +75,6 @@ class StorageInterface:
 
 
     def delete_element(self):
-        # TODO: implement storage element deletion, 
-        # nothing special here
         try:
             element = self.request.get("queryElement", "")
             element_id = self.request.get("elementUID", "")
