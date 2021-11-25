@@ -31,7 +31,7 @@ def test():
         print(store.retrieve("PROJECT","5678-4321"))
         print("*** Error should have been raised ***")
     except NotImplementedError as nie:
-        print("Error correctly raised |",nie)
+        print("Error correctly raised |->",nie)
     store = FileStorage("Backend/storage/data/","0002")
     print("LOGGED IN | 0002")
     print(store.delete("PROJECT","5678-8765"))
@@ -50,7 +50,7 @@ def test():
         print(store.delete("USER","0001"))
         print("*** Error should have been raised ***")
     except PermissionError as pe:
-        print("Error correctly raised |",pe)
+        print("Error correctly raised |->",pe)
     store = FileStorage("Backend/storage/data/","0001")
     print("LOGGED IN | 0001")
     print(store.delete("ORGANIZATION","1234"))
