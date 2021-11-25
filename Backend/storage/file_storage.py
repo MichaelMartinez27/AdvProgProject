@@ -1,5 +1,5 @@
 """
-Project: Project Manager
+Project: Project Management Tool
 Team:    4
 Author:  Michael Martinez
 Course: CSCI 3920
@@ -20,9 +20,16 @@ class FileStorage:
     _user_admin:       str
 
     def __init__(self,db_dir:str, user_uid:str = None):
+        if db_dir[-1] != "/":
+            db_dir += "/"
         self._file_storage_dir = db_dir
         self._user =            user_uid
         self._user_admin =      self.retrieve("USER",self.user).get("admin",False)
+        if not os.path.exists(f"{self._file_storage_dir}organizations"):
+            os.mkdir(f"{self._file_storage_dir}organizations")
+        if not os.path.exists(f"{self._file_storage_dir}users"):
+            os.mkdir(f"{self._file_storage_dir}users")
+        
 
     @property
     def file_storage_dir(self):
@@ -35,6 +42,10 @@ class FileStorage:
     @property
     def user_admin(self):
         return self._user_admin
+
+    @user_admin.setter
+    def user_admin(self, value):
+        raise PermissionError("user admin status should not be set this way")
 
     def create(self,element: str, element_id: str, element_info: dict):
         """
