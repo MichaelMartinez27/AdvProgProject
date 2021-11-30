@@ -75,6 +75,21 @@ public class Client {
         }});
         Client c1 = new Client("127.0.0.1", 3920, request);
         c1.send();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         request = new Request("1","CREATE","ORGANIZATION","6713234");
         request.setNewInfo(new HashMap<String,String>(){{
             put("name","Pythonia");

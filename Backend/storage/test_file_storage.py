@@ -15,7 +15,7 @@ def test():
     print(store.update("USER","0002",{"email":"john.smith@email.com"}))
     print(store.retrieve("USER","0002"))
     print(store.create("ORGANIZATION","5678",{"name":"CompanyY","editors":["0001","0002"]}))
-    print(store.create("PROJECT","1234-4321",{"title":"ProjectX","editors":["0001","0001"]}))
+    print(store.create("PROJECT","1234-4321",{"title":"ProjectX","editors":["0001"]}))
     print(store.create("PROJECT","5678-4321",{"title":"ProjectA","editors":["0001","0002"]}))
     print(store.create("PROJECT","5678-8765",{"title":"ProjectB","editors":["0002"]}))
     print(store.retrieve("USER","0001"))
