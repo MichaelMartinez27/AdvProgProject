@@ -6,7 +6,7 @@ Course:  CSCI 3920
 
 """
 import os
-from  Backend.storage.file_storage import FileStorage as store
+from  storage.file_storage import FileStorage as store
 
 STORAGE_LOCATION = "Backend/storage/data/"
 

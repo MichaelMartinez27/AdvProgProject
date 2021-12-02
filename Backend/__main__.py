@@ -1,4 +1,4 @@
-from .network.server import Server
+from network.server import Server
 
 def main():
     server = Server("127.0.0.1",3920)

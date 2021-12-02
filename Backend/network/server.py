@@ -1,5 +1,5 @@
 import socket
-from Backend.network.connection_handler import ConnectionHandler
+from network.connection_handler import ConnectionHandler
 
 class Server():
     def __init__(self, addr: str, port: int) -> None:

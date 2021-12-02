@@ -2,7 +2,7 @@ from threading import Thread
 from time import sleep
 import json
 import re
-from Backend.storage.storage_interface import StorageInterface
+from storage.storage_interface import StorageInterface
 
 BUFFER_SIZE = 1024
 
