@@ -2,7 +2,7 @@
 Project: Project Management Tool
 Team:    4
 Author:  Michael Martinez
-Course: CSCI 3920
+Course:  CSCI 3920
 
 """
 import os
@@ -54,6 +54,8 @@ class StorageInterface:
                 element = self._request.get("queryElement", "")
                 element_id = self._request.get("elementUID", "")
                 element_info = self._request.get("newInfo", {})
+                # create model with element info
+                # result = self.storage.create(element, element_id, dict(model))
                 result = self.storage.create(element, element_id, element_info)
                 return [{"result": result}]
             except AttributeError:

@@ -2,7 +2,7 @@
 Project: Project Management Tool
 Team:    4
 Author:  Michael Martinez
-Course: CSCI 3920
+Course:  CSCI 3920
 
 """
 import json
@@ -47,6 +47,9 @@ class FileStorage:
     def user_admin(self, value):
         raise PermissionError("user admin status should not be set this way")
 
+###############################################################################
+# CREATE ######################################################################
+###############################################################################
     def create(self,element: str, element_id: str, element_info: dict):
         """
         Public method to create element (USER|ORGANIZATION|PROJECT) based on
@@ -127,6 +130,9 @@ class FileStorage:
         else:
             raise PermissionError("user does not have permission to create element")
 
+###############################################################################
+# RETRIEVE ####################################################################
+###############################################################################
     def retrieve(self, element:str, element_uid:str):
         """
         Public method to retrieve element (USER|ORGANIZATION|PROJECT) based on
@@ -193,6 +199,9 @@ class FileStorage:
         else:
             raise PermissionError("user does not have permission to retrieve element")
 
+###############################################################################
+# UPDATE ######################################################################
+###############################################################################
     def update(self, element:str, element_uid:str, element_info:dict):
         """
         Public method to update element (USER|ORGANIZATION|PROJECT) based on
@@ -329,6 +338,9 @@ class FileStorage:
             raise AttributeError("element does not exsist")
 
 
+###############################################################################
+# DELETE ######################################################################
+###############################################################################
     def delete(self, element:str, element_uid:dict):
         """
         Public method to delete element (USER|ORGANIZATION|PROJECT) based on
@@ -427,6 +439,9 @@ class FileStorage:
         else:
             raise AttributeError("element does not exsist")
 
+###############################################################################
+# GET ALL OF AN ELEMENTS ######################################################
+###############################################################################
     def getAllUserIDs(self):
         """
         Public method to get all users saved in storage.
