@@ -43,6 +43,9 @@ class StorageInterface:
         management tool.
         
         """
+###############################################################################
+# CREATE ######################################################################
+###############################################################################
         def create_element():
             """
             creates element of request using storage api
@@ -67,6 +70,9 @@ class StorageInterface:
                 action = self._request.get('queryAction')
                 return [{"result": f'unable to {action} {element}:"{element_id}"'}]
 
+###############################################################################
+# RETRIEVE ####################################################################
+###############################################################################
         def retrieve_element():
             """
             retrieves element of request using storage api
@@ -89,6 +95,9 @@ class StorageInterface:
                 action = self._request.get('queryAction')
                 return [{"result": f'unable to {action} {element}:"{element_id}"'}]
 
+###############################################################################
+# UPDATE ######################################################################
+###############################################################################
         def update_element():
             """
             updates element of request using storage api
@@ -109,6 +118,9 @@ class StorageInterface:
                 action = self._request.get('queryAction')
                 return [{"result": f'unable to {action} {element}:"{element_id}"'}]
 
+###############################################################################
+# DELETE ######################################################################
+###############################################################################
         def delete_element():
             """
             deletes element of request using storage api
