@@ -1,10 +1,15 @@
 package FrontEnd.src.edu.ucdenver.network;
+/*
+ * Project: Project Management Tool
+ * Team:    4
+ * Author:  Michael Martinez
+ * Course:  CSCI 3920
+ *
+ */
 
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 import java.util.HashMap;
-
-import static javax.swing.UIManager.put;
 
 public class Client {
     private final String server_address;
