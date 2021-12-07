@@ -17,6 +17,7 @@ from models.projects import Project
 STORAGE_LOCATION = "storage/data/"
 USER_ID_COUNT = 1
 PROJECT_ID_COUNT = 1
+ORG_ID_COUNT = 1000
 MODELS = {
     "USER": User,
     "ORGANIZATION": Organization,
@@ -66,7 +67,7 @@ class StorageInterface:
             creates element of request using storage api
 
             """
-            global USER_ID_COUNT, PROJECT_ID_COUNT
+            global USER_ID_COUNT, PROJECT_ID_COUNT, ORG_ID_COUNT
             # get element from request
             element = self._request.get("queryElement", "")
             element_info = self._request.get("newInfo", {})
@@ -85,11 +86,12 @@ class StorageInterface:
                     )
                     USER_ID_COUNT += 1
                 elif element == "ORGANIZATION":
-                    random_id = str(uuid.uuid1()).split('-')[0]
+                    # random_id = str(uuid.uuid1()).split('-')[0]
                     model = Organization(
                         name=element_info.get("name"),
-                        id=random_id
+                        id=str(ORG_ID_COUNT).zfill(6)
                     )
+                    ORG_ID_COUNT += 10
                 elif element == "PROJECT":
                     model = Project(
                         id="P"+str(USER_ID_COUNT).zfill(4),
@@ -102,6 +104,7 @@ class StorageInterface:
                         createdDate=time.strftime("%m/%d/%Y %H:%M:%S"),
                         createdBy=self._requesting_user
                     )
+                    USER_ID_COUNT += 1
 
                 element_id = model.id
                 print()
