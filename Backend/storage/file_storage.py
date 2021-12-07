@@ -16,20 +16,20 @@ class FileStorage:
 
     """
     _file_storage_dir: str
-    _user:             str
-    _user_admin:       str
+    _user: str
+    _user_admin: str
 
-    def __init__(self,db_dir:str, user_uid:str = None):
+    def __init__(self, db_dir: str, user_uid: str = None):
         if db_dir[-1] != "/":
             db_dir += "/"
         self._file_storage_dir = db_dir
-        self._user =            user_uid
-        self._user_admin =      self.retrieve("USER",self.user).get("admin",False)
+        self._user = user_uid
+        self._user_admin = self.retrieve("USER", self.user).get("admin", False)
+
         if not os.path.exists(f"{self._file_storage_dir}organizations"):
             os.mkdir(f"{self._file_storage_dir}organizations")
         if not os.path.exists(f"{self._file_storage_dir}users"):
             os.mkdir(f"{self._file_storage_dir}users")
-        
 
     @property
     def file_storage_dir(self):
@@ -47,30 +47,31 @@ class FileStorage:
     def user_admin(self, value):
         raise PermissionError("user admin status should not be set this way")
 
-###############################################################################
-# CREATE ######################################################################
-###############################################################################
-    def create(self,element: str, element_id: str, element_info: dict):
+    ###############################################################################
+    # CREATE ######################################################################
+    ###############################################################################
+    def create(self, element: str, element_id: str, element_info: dict):
         """
         Public method to create element (USER|ORGANIZATION|PROJECT) based on
         information passed in.
 
         """
-        def createUser(user_id:str, user_info: dict):
+
+        def createUser(user_id: str, user_info: dict):
             """
             Private method that handles creation of USER
             
             """
             try:
                 with open(f'{self.file_storage_dir}users/{user_id}.json',
-                        mode="w",
-                        encoding='utf-8') as file:
+                          mode="w",
+                          encoding='utf-8') as file:
                     json.dump(user_info, file)
                 return True
             except:
                 return False
 
-        def createOrganization(org_id:str, creator_id:str, org_info: dict):
+        def createOrganization(org_id: str, creator_id: str, org_info: dict):
             """
             Private method that handles creation of ORGANIZATION
             
@@ -81,18 +82,18 @@ class FileStorage:
                     os.makedirs(f'{self.file_storage_dir}organizations/{org_id}/projects')
                 if creator_id:
                     with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
-                            mode="w",
-                            encoding="utf-8") as file: 
+                              mode="w",
+                              encoding="utf-8") as file:
                         json.dump([creator_id], file)
                 with open(f'{self.file_storage_dir}organizations/{org_id}/info.json',
-                        mode="w",
-                        encoding='utf-8') as file:
+                          mode="w",
+                          encoding='utf-8') as file:
                     json.dump(org_info, file)
                 return True
             except:
                 return False
 
-        def createProject(proj_id:str, proj_info:str):
+        def createProject(proj_id: str, proj_info: str):
             """
             Private method that handles creation of PROJECT
             
@@ -102,8 +103,8 @@ class FileStorage:
                 if not os.path.exists(f'{self.file_storage_dir}organizations/{org_id}'):
                     return False
                 with open(f'{self.file_storage_dir}organizations/{org_id}/projects/{proj_id}.json',
-                            mode="w",
-                            encoding="utf-8") as file:
+                          mode="w",
+                          encoding="utf-8") as file:
                     json.dump(proj_info, file)
                 return True
             except:
@@ -114,13 +115,13 @@ class FileStorage:
         if self.user == "1111" or self._user_admin:
             if element == "USER":
                 createUser(element_id, element_info)
-                return "user created"
+                return f"user created: {element_id}"
             elif element == "ORGANIZATION":
                 createOrganization(element_id, self.user, element_info)
-                return "org created"
+                return f"org created: {element_id}"
             elif element == "PROJECT":
                 if createProject(element_id, element_info):
-                    return "project created"
+                    return f"project created: {element_id}"
                 else:
                     raise AttributeError("organization does not exsist")
             elif element == "TASK":
@@ -130,15 +131,16 @@ class FileStorage:
         else:
             raise PermissionError("user does not have permission to create element")
 
-###############################################################################
-# RETRIEVE ####################################################################
-###############################################################################
-    def retrieve(self, element:str, element_uid:str):
+    ###############################################################################
+    # RETRIEVE ####################################################################
+    ###############################################################################
+    def retrieve(self, element: str, element_uid: str):
         """
         Public method to retrieve element (USER|ORGANIZATION|PROJECT) based on
         unique id.
 
         """
+
         def getUser(user_id: str):
             """
             Private method that handles retrieval of USER
@@ -146,8 +148,8 @@ class FileStorage:
             """
             try:
                 with open(f'{self.file_storage_dir}users/{user_id}.json',
-                        mode="r",
-                        encoding='utf-8') as file:
+                          mode="r",
+                          encoding='utf-8') as file:
                     return json.load(file)
             except FileNotFoundError:
                 return {}
@@ -159,8 +161,8 @@ class FileStorage:
             """
             try:
                 with open(f'{self.file_storage_dir}organizations/{org_id}/info.json',
-                        mode="r",
-                        encoding='utf-8') as file:
+                          mode="r",
+                          encoding='utf-8') as file:
                     return json.load(file)
             except FileNotFoundError:
                 return {}
@@ -173,8 +175,8 @@ class FileStorage:
             org_id, proj_id = tuple(proj_id.split("-"))
             try:
                 with open(f'{self.file_storage_dir}organizations/{org_id}/projects/{proj_id}.json',
-                        mode="r",
-                        encoding='utf-8') as file:
+                          mode="r",
+                          encoding='utf-8') as file:
                     return json.load(file)
             except FileNotFoundError:
                 return {}
@@ -182,7 +184,7 @@ class FileStorage:
         if element == "PROJECT":
             project = getProject(element_uid)
             if project:
-                if self.user in project.get("editors",[]) + project.get("viewers",[]):
+                if self.user in project.get("editors", []) + project.get("viewers", []):
                     return project
                 raise PermissionError("user does not have permission to retrieve element")
             else:
@@ -190,7 +192,7 @@ class FileStorage:
         elif element == "ORGANIZATION":
             org = getOrganization(element_uid)
             if org:
-                if self.user in org.get("editors",[]) + org.get("viewers",[]):
+                if self.user in org.get("editors", []) + org.get("viewers", []):
                     return org
             else:
                 raise NotImplementedError("orginization does not exsist")
@@ -199,26 +201,27 @@ class FileStorage:
         else:
             raise PermissionError("user does not have permission to retrieve element")
 
-###############################################################################
-# UPDATE ######################################################################
-###############################################################################
-    def update(self, element:str, element_uid:str, element_info:dict):
+    ###############################################################################
+    # UPDATE ######################################################################
+    ###############################################################################
+    def update(self, element: str, element_uid: str, element_info: dict):
         """
         Public method to update element (USER|ORGANIZATION|PROJECT) based on
         information passed in.
 
         """
+
         def updateUser(user_id: str, user_update_info: dict):
             """
             Private method that handles creation of USER
             
             """
-            user = self.retrieve("USER",user_id)
+            user = self.retrieve("USER", user_id)
             if user:
                 for key, val in user_update_info.items():
                     if key != "userUID":
                         user[key] = val
-                if self.create("USER",user_id, user):
+                if self.create("USER", user_id, user):
                     return True
             return False
 
@@ -227,37 +230,37 @@ class FileStorage:
             Private method that handles update of ORGANIZATION
             
             """
-            org = self.retrieve("ORGANIZATION",org_id)
+            org = self.retrieve("ORGANIZATION", org_id)
             if org:
                 for key, val in org_update_info.items():
                     if key == "user":
                         with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
-                        mode="r",
-                        encoding="utf-8") as file:
+                                  mode="r",
+                                  encoding="utf-8") as file:
                             users = json.load(file)
                             users.append(val)
                             with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
-                            mode="w",
-                            encoding="utf-8") as file:
-                                json.dump(users,file)
+                                      mode="w",
+                                      encoding="utf-8") as file:
+                                json.dump(users, file)
                     elif key == "users":
                         with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
-                        mode="r",
-                        encoding="utf-8") as file:
+                                  mode="r",
+                                  encoding="utf-8") as file:
                             users = json.load(file)
                             users += val
                             with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
-                            mode="w",
-                            encoding="utf-8") as file:
-                                json.dump(users,file)
+                                      mode="w",
+                                      encoding="utf-8") as file:
+                                json.dump(users, file)
                     elif key != "organizationUID":
                         if type(val) == list:
-                            org[key] = list(org.get(key,[])) + val
+                            org[key] = list(org.get(key, [])) + val
                         elif type(org.get(key)) == list:
                             org[key] += [val]
                         else:
                             org[key] = val
-                if self.create("ORGANIZATION",org_id, org):
+                if self.create("ORGANIZATION", org_id, org):
                     return True
             return False
 
@@ -266,17 +269,17 @@ class FileStorage:
             Private method that handles update of PROJECT
             
             """
-            proj = self.retrieve("PROJECT",proj_id)
+            proj = self.retrieve("PROJECT", proj_id)
             if proj:
                 for key, val in proj_update_info.items():
                     if key != "projectUID":
                         if type(val) == list:
-                            proj[key] = list(proj.get(key,[])) + val
+                            proj[key] = list(proj.get(key, [])) + val
                         elif type(proj.get(key)) == list:
                             proj[key] += [val]
                         else:
                             proj[key] = val
-                if self.create("PROJECT",proj_id, proj):
+                if self.create("PROJECT", proj_id, proj):
                     return True
             return False
 
@@ -296,10 +299,10 @@ class FileStorage:
             else:
                 raise PermissionError("user does not have permission to update element")
         if element == "ORGANIZATION":
-            org = self.retrieve("ORGANIZATION",element_uid)
+            org = self.retrieve("ORGANIZATION", element_uid)
             if org:
-                if self.user in org.get("editors",[]):
-                    if updateOrganization(element_uid,element_info):
+                if self.user in org.get("editors", []):
+                    if updateOrganization(element_uid, element_info):
                         return "organization updated"
                     raise NotImplementedError("could not update organization")
                 else:
@@ -307,9 +310,9 @@ class FileStorage:
             else:
                 raise NotImplementedError("organization does not exsist")
         elif element == "PROJECT":
-            proj = self.retrieve("PROJECT",element_uid)
+            proj = self.retrieve("PROJECT", element_uid)
             if proj:
-                if self.user in proj.get("editors",[]):
+                if self.user in proj.get("editors", []):
                     if updateProject(element_uid, element_info):
                         return "project updated"
                     raise NotImplementedError("could not update project")
@@ -324,9 +327,9 @@ class FileStorage:
         # 4. if task unique id matches updateTask()
         # 5. resave project without task
         elif element == "TASK":
-            proj = self.retrieve("PROJECT","-".join(element_uid.split("-")[:2]))
+            proj = self.retrieve("PROJECT", "-".join(element_uid.split("-")[:2]))
             if proj:
-                if self.user in proj.get("editors",[]):
+                if self.user in proj.get("editors", []):
                     if updateTask(element_uid):
                         return "project updated"
                     raise NotImplementedError("could not update task")
@@ -337,16 +340,16 @@ class FileStorage:
         else:
             raise AttributeError("element does not exsist")
 
-
-###############################################################################
-# DELETE ######################################################################
-###############################################################################
-    def delete(self, element:str, element_uid:dict):
+    ###############################################################################
+    # DELETE ######################################################################
+    ###############################################################################
+    def delete(self, element: str, element_uid: dict):
         """
         Public method to delete element (USER|ORGANIZATION|PROJECT) based on
         unique id.
 
         """
+
         def deleteUser(user_id: str):
             """
             Private method that handles deletion of USER
@@ -365,7 +368,7 @@ class FileStorage:
             """
             orgfile = f'{self.file_storage_dir}organizations/{org_id}/'
             if os.path.exists(orgfile):
-                shutil.rmtree(orgfile,ignore_errors=True)
+                shutil.rmtree(orgfile, ignore_errors=True)
                 return True
             return False
 
@@ -387,9 +390,9 @@ class FileStorage:
             
             """
             org_id, proj_id, task_id = tuple(task_id.split("-"))
-            proj_id = "-".join([org_id,proj_id])
+            proj_id = "-".join([org_id, proj_id])
             project = self.retrieve("PROJECT", proj_id)
-            for index, task in enumerate(project.get("tasks",[])):
+            for index, task in enumerate(project.get("tasks", [])):
                 if task["id"] == task_id:
                     del (project["tasks"][index])
             if self.create("PROJECT", proj_id, project):
@@ -404,9 +407,9 @@ class FileStorage:
             else:
                 raise PermissionError("user does not have permission to delete element")
         if element == "ORGANIZATION":
-            org = self.retrieve("ORGANIZATION",element_uid)
+            org = self.retrieve("ORGANIZATION", element_uid)
             if org:
-                if self.user in org.get("editors",[]):
+                if self.user in org.get("editors", []):
                     if deleteOrganization(element_uid):
                         return "organization deleted"
                     raise NotImplementedError("could not delete organization")
@@ -415,9 +418,9 @@ class FileStorage:
             else:
                 raise NotImplementedError("organization does not exsist")
         elif element == "PROJECT":
-            proj = self.retrieve("PROJECT",element_uid)
+            proj = self.retrieve("PROJECT", element_uid)
             if proj:
-                if self.user in proj.get("editors",[]):
+                if self.user in proj.get("editors", []):
                     if deleteProject(element_uid):
                         return "project deleted"
                     raise NotImplementedError("could not delete project")
@@ -426,9 +429,9 @@ class FileStorage:
             else:
                 raise NotImplementedError("project does not exsist")
         elif element == "TASK":
-            proj = self.retrieve("PROJECT","-".join(element_uid.split("-")[:2]))
+            proj = self.retrieve("PROJECT", "-".join(element_uid.split("-")[:2]))
             if proj:
-                if self.user in proj.get("editors",[]):
+                if self.user in proj.get("editors", []):
                     if deleteTask(element_uid):
                         return "project deleted"
                     raise NotImplementedError("could not delete task")
@@ -439,16 +442,16 @@ class FileStorage:
         else:
             raise AttributeError("element does not exsist")
 
-###############################################################################
-# GET ALL OF AN ELEMENTS ######################################################
-###############################################################################
+    ###############################################################################
+    # GET ALL OF AN ELEMENTS ######################################################
+    ###############################################################################
     def getAllUserIDs(self):
         """
         Public method to get all users saved in storage.
 
         """
         users = os.listdir(f'{self.file_storage_dir}users/')
-        return [user.replace(".json","") for user in users]
+        return [user.replace(".json", "") for user in users]
 
     def getAllOrganizationsIDs(self):
         """
@@ -456,15 +459,12 @@ class FileStorage:
 
         """
         organizations = os.listdir(f'{self.file_storage_dir}organizations/')
-        return [organization.replace(".json","") for organization in organizations]
+        return [organization.replace(".json", "") for organization in organizations]
 
-    def getAllProjectsIDs(self,organization_id):
+    def getAllProjectsIDs(self, organization_id):
         """
         Public method to get all projects saved in storage.
 
         """
         projects = os.listdir(f'{self.file_storage_dir}organizations/{organization_id}')
-        return [project.replace(".json","") for project in projects]
-
-
-
+        return [project.replace(".json", "") for project in projects]

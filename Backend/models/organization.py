@@ -1,8 +1,8 @@
-from user import User
-from projects import Project
+from models.user import User
+from models.projects import Project
+
 
 class Organization:
-    
     users = []
     projects = []
 

@@ -1,11 +1,16 @@
-from file_storage import FileStorage
+import os
 
+from file_storage import FileStorage
+import os
+
+FILE_STORAGE = "storage/data/"
 
 def test():
-    store = FileStorage("Backend/storage/data/","1111")
+    print(os.getcwd())
+    store = FileStorage(FILE_STORAGE,"1111")
     print("LOGGED IN | 1111")
     print(store.create("USER","0001",{"first":"Michael","last":"Martinez","admin":True}))
-    store = FileStorage("Backend/storage/data/","0001")
+    store = FileStorage(FILE_STORAGE,"0001")
     print("LOGGED IN | 0001")
     print(store.update("USER","0001",{"email":"michael.martinez@email.com"}))
     print(store.create("ORGANIZATION","1234",{"name":"CompanyX","editors":["0001"]}))
@@ -32,11 +37,11 @@ def test():
         print("*** Error should have been raised ***")
     except NotImplementedError as nie:
         print("Error correctly raised |->",nie)
-    store = FileStorage("Backend/storage/data/","0002")
+    store = FileStorage(FILE_STORAGE,"0002")
     print("LOGGED IN | 0002")
     print(store.delete("PROJECT","5678-8765"))
     print(store.delete("ORGANIZATION","5678"))
-    store = FileStorage("Backend/storage/data/","0001")
+    store = FileStorage(FILE_STORAGE,"0001")
     print("LOGGED IN | 0001")
     print(store.create("USER","0003",{"first":"John","last":"Doe","admin":False}))
     print(store.update("USER","0003",{"email":"jd@hotmail.com","username":"johnny-boi"}))
@@ -44,14 +49,14 @@ def test():
     print(store.update("ORGANIZATION","1234",{"users":["0002","0003"],"editors":"0003"}))
     print(store.retrieve("ORGANIZATION","1234"))
     print(store.delete("USER","0002"))
-    store = FileStorage("Backend/storage/data/","0003")
+    store = FileStorage(FILE_STORAGE,"0003")
     print("LOGGED IN | 0003")
     try:
         print(store.delete("USER","0001"))
         print("*** Error should have been raised ***")
     except PermissionError as pe:
         print("Error correctly raised |->",pe)
-    store = FileStorage("Backend/storage/data/","0001")
+    store = FileStorage(FILE_STORAGE,"0001")
     print("LOGGED IN | 0001")
     print(store.delete("ORGANIZATION","1234"))
     print(store.delete("USER","0003"))

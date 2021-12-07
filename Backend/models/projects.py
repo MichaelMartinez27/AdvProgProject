@@ -1,9 +1,8 @@
-from organization import Organization
-from task import Task
-from user import User
+from models.task import Task
+from models.user import User
+
 
 class Project:
-
     tasks = []
 
     def __init__(self, id, title, description, goals, tasks, usersCanEdit, usersCanView, createdDate, createdBy):
@@ -74,5 +73,3 @@ class Project:
 
     def addUser(self, fName, lName, email, userName, passWord):
         newUser = User(fName, lName, email, userName, passWord)
-        Organization.users.append(newUser)
-        

@@ -1,29 +1,29 @@
 import base64
 
+
 class User:
-
-    def __init__(self, firstName, lastName, email, username, password, adminOrNot):
-
+    def __init__(self, id, firstName, lastName, email, username, password, admin):
+        self.id = id
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
         self.username = username
-        self.password = password
-        self.adminOrNot = adminOrNot
+        self.password = self.encodePassword(password)
+        self.admin = admin
 
     def __dict__(self):
         
         return {
-            "First Name" : self.firstName,
-            "Last Name" : self.lastName,
-            "Email" : self.email,
-            "Username" : self.username,
-            "Password" : self.password,
-            "Admin Status" : self.adminOrNot
+            "firstName": self.firstName,
+            "lastName": self.lastName,
+            "email": self.email,
+            "username": self.username,
+            "password": self.password,
+            "admin": self.admin
         }
 
-    def setAdmin(self, adminOrNot):
-        self.adminOrNot = adminOrNot
+    def setAdmin(self, admin):
+        self.admin = admin
 
     def setFirstName(self, fnameToSet):
         self.firstName = fnameToSet
@@ -56,7 +56,7 @@ class User:
         return self.username
 
     def isAdmin(self):
-        if self.adminOrNot == True:
+        if self.admin == True:
             return True
         else:
             return False
