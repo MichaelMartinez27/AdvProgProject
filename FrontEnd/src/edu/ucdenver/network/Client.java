@@ -109,13 +109,13 @@ public class Client {
 
         Request request;
         Client c;
+
         request = new Request("0001","CREATE","ORGANIZATION","");
         request.setNewInfo(new HashMap<String,String>(){{
             put("name","Pythonia");
         }});
         c = new Client("127.0.0.1", 3920, request);
         c.send();
-
 
         request = new Request("0002","CREATE","ORGANIZATION","");
         request.setNewInfo(new HashMap<String,String>(){{
@@ -124,8 +124,7 @@ public class Client {
         c = new Client("127.0.0.1", 3920, request);
         c.send();
 
-
-        request = new Request("0001","CREATE","PROJECT","");
+        request = new Request("0001","CREATE","PROJECT","001000");
         request.setNewInfo(new HashMap<String,String>(){{
             put("title","ProjectX");
             put("description","New cool project.");
@@ -133,20 +132,16 @@ public class Client {
         c = new Client("127.0.0.1", 3920, request);
         c.send();
 
-
-        Client c2 = new Client("127.0.0.1", 3920, request);
-        c2.send();
-
         request = new Request("0001","CREATE","THING","54");
-        Client c3 = new Client("127.0.0.1",3920,request);
-        c3.send();
+        c = new Client("127.0.0.1",3920,request);
+        c.send();
 
         request = new Request("0001","NONACTION","PROJECT","08");
-        Client c4 = new Client("127.0.0.1",3920,request);
-        c4.send();
+        c = new Client("127.0.0.1",3920,request);
+        c.send();
+
         request = new Request("0001","RETRIEVE","project","P0001");
         c = new Client("127.0.0.1", 3920, request);
         c.send();
     }
-
 }

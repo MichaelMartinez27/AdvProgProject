@@ -94,7 +94,7 @@ class StorageInterface:
                     ORG_ID_COUNT += 10
                 elif element == "PROJECT":
                     model = Project(
-                        id="P"+str(USER_ID_COUNT).zfill(4),
+                        id=self._request.get("elementUID","") + "-P"+str(PROJECT_ID_COUNT).zfill(4),
                         title=element_info.get("title"),
                         description=element_info.get("description"),
                         goals=element_info.get("goals", []),
@@ -104,15 +104,18 @@ class StorageInterface:
                         createdDate=time.strftime("%m/%d/%Y %H:%M:%S"),
                         createdBy=self._requesting_user
                     )
-                    USER_ID_COUNT += 1
+                    PROJECT_ID_COUNT += 1
 
-                element_id = model.id
-                print()
+                element_id = model.id if not isinstance(model, dict) else ""
+                if not isinstance(model,(User, Organization, Project)):
+                    return [{"result": f'element "{element}" doesn\'t exist'}]
                 result = self.storage.create(element, element_id, model.__dict__())
                 return [{"result": result}]
 
             except AttributeError as err:
                 print("ERR|", err)
+                if element == "PROJECT":
+                    element = f"ORGANIZATION ({element_id})"
                 return [{"result": f'element "{element}" doesn\'t exist'}]
             except PermissionError as err:
                 print("ERR|", err)
