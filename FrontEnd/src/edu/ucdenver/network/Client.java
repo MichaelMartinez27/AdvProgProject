@@ -140,7 +140,11 @@ public class Client {
         c = new Client("127.0.0.1",3920,request);
         c.send();
 
-        request = new Request("0001","RETRIEVE","project","P0001");
+        request = new Request("0001","RETRIEVE","PROJECT","001000-P0001");
+        c = new Client("127.0.0.1", 3920, request);
+        c.send();
+
+        request = new Request("0003","RETRIEVE","USER","ALL");
         c = new Client("127.0.0.1", 3920, request);
         c.send();
     }
