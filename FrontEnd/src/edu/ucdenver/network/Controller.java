@@ -5,7 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -25,6 +28,28 @@ public class Controller implements Initializable {
 
     @FXML
     private AnchorPane slider;
+
+    @FXML
+    private Label MenuBack;
+
+    @FXML
+    private ListView<String> listOfProjects;
+
+    @FXML
+    private TextField projectName;
+
+    @FXML
+    public void addProject(MouseEvent event) {
+        listOfProjects.getItems().add(projectName.getText());
+    }
+    
+    @FXML
+    public void removeProject(javafx.scene.input.MouseEvent event) {
+        int selectedID = listOfProjects.getSelectionModel().getSelectedIndex();
+        listOfProjects.getItems().remove(selectedID);
+    }
+
+
 
 
     @Override
@@ -65,5 +90,8 @@ public class Controller implements Initializable {
                 MenuClose.setVisible(false);
             });
         });
+    }
+
+    public void updateProfileP(MouseEvent event) {
     }
 }
