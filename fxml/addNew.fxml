@@ -7,47 +7,35 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="342.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="350.0" prefWidth="523.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox layoutX="52.0" layoutY="13.0" prefHeight="300.0" prefWidth="421.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="48.0" layoutY="30.0" prefHeight="320.0" prefWidth="421.0">
          <children>
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="436.0" text="Username:">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="userNameP" />
+            <TextField fx:id="userNameP" promptText="Username" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="436.0" text="First Name:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="firstNameP" />
+            <TextField fx:id="firstNameP" promptText="First name" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="436.0" text="Last Name:">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="lastNameP" />
+            <TextField fx:id="lastNameP" promptText="Last Name" />
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="436.0" text="Email:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="emailP" />
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="436.0" text="Create New Password:">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <TextField fx:id="createPasswordP" />
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="436.0" text="Confirm Password:">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <TextField fx:id="confirmPasswordP" />
-            <Button mnemonicParsing="false" onMouseClicked="#updateProfileP" prefHeight="38.0" prefWidth="421.0" text="Update Profile" />
+            <TextField fx:id="emailP" promptText="Email" />
+            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="421.0" text="Add Member" />
          </children>
       </VBox>
    </children>

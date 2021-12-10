@@ -14,6 +14,7 @@ public class MainGui extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
+        Scene scene = new Scene(root);
         stage.initStyle(StageStyle.UNDECORATED);
 
        /*
@@ -32,7 +33,7 @@ public class MainGui extends Application {
             stage.setX(event.getScreenX() - x);
             stage.setY(event.getScreenY() - y);
         });
-        stage.setScene(new Scene(root, 850,523));
+        stage.setScene(scene);
         stage.show();
     }
 

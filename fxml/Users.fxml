@@ -187,12 +187,12 @@
                                                 <Insets left="20.0" top="15.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Button mnemonicParsing="false" style="-fx-background-radius: 1em;" styleClass="button 2" text="Add Member">
+                                          <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleButtonAction" style="-fx-background-radius: 1em;" styleClass="button 2" text="Add Member">
                                              <HBox.margin>
                                                 <Insets left="24.0" top="15.0" />
                                              </HBox.margin>
                                           </Button>
-                                          <Button mnemonicParsing="false" style="-fx-background-radius: 1em;" text="Delete Member">
+                                          <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#handleButtonAction" style="-fx-background-radius: 1em;" text="Delete Member">
                                              <HBox.margin>
                                                 <Insets left="150.0" top="15.0" />
                                              </HBox.margin>
