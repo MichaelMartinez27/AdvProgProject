@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.src.edu.ucdenver.network.Controller">
+<AnchorPane prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.src.edu.ucdenver.application.Controller">
    <children>
-      <BorderPane layoutX="262.0" layoutY="122.0" prefHeight="400.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutX="262.0" layoutY="122.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <AnchorPane prefHeight="65.0" prefWidth="700.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                <children>
                   <Pane layoutX="100.0" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #032d4d;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -168,24 +168,23 @@
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <ListView fx:id="listOfProjects" layoutX="250.0" layoutY="14.0" prefHeight="251.0" prefWidth="210.0" />
-                  <Button layoutX="57.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#addProject" prefHeight="52.0" prefWidth="128.0" text="Add Project">
+                  <ListView fx:id="listOfOrganizations" layoutX="250.0" layoutY="14.0" prefHeight="251.0" prefWidth="210.0" />
+                  <Button layoutX="40.0" layoutY="168.0" mnemonicParsing="false" onMouseClicked="#addOrganization" prefHeight="52.0" prefWidth="163.0" text="Add Organization">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="projectName" layoutX="22.0" layoutY="127.0" prefHeight="26.0" prefWidth="198.0" promptText="Project Name" />
-                  <Button layoutX="283.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#removeProject" prefHeight="52.0" prefWidth="145.0" style="-fx-background-color: red;" text="Remove Project">
+                  <TextField fx:id="organizationName" layoutX="22.0" layoutY="127.0" prefHeight="26.0" prefWidth="198.0" />
+                  <Button layoutX="249.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#removeOrganization" prefHeight="52.0" prefWidth="212.0" style="-fx-background-color: red;" text="Remove Organization">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
-                  <ImageView fitHeight="82.0" fitWidth="119.0" layoutX="87.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="82.0" fitWidth="119.0" layoutX="62.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../Icons/addfile.png" />
+                        <Image url="@../Icons/Organ.png" />
                      </image>
                   </ImageView>
-                  <TextField fx:id="projectDescription" alignment="TOP_LEFT" layoutX="22.0" layoutY="168.0" prefHeight="95.0" prefWidth="198.0" promptText="Project Description" />
                </children>
             </AnchorPane>
          </center>

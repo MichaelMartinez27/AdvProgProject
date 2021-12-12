@@ -7,27 +7,29 @@ package FrontEnd.src.edu.ucdenver.network;
  *
  */
 
+
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
+import org.json.JSONArray;
 
 public class Client {
-    private final String server_address;
-    private final int server_port;
+    private final String serverAddress;
+    private final int serverPort;
     private PrintWriter writer;
     private InputStreamReader reader;
     private Request request;
 
-    public Client(String server_address, int server_port, Request request) {
-        this.server_address = server_address;
-        this.server_port = server_port;
+    public Client(String serverAddress, int serverPort, Request request) {
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
         this.request = request;
         this.setup();
     }
 
     private void setup() {
         try {
-            Socket socket = new Socket(this.server_address, this.server_port);
+            Socket socket = new Socket(this.serverAddress, this.serverPort);
             OutputStream output = socket.getOutputStream();
             this.writer = new PrintWriter(output, true);
             InputStream input = socket.getInputStream();
@@ -38,7 +40,7 @@ public class Client {
         }
     }
 
-    public void send(){
+    public JSONArray send(){
         int character;
         StringBuilder data = new StringBuilder();
 
@@ -47,19 +49,22 @@ public class Client {
 
         try {
             while ((character = reader.read()) != -1) {data.append((char) character);}
-            System.out.println(data);
+            JSONArray json_array = new JSONArray(data.toString());
+            System.out.println(json_array.toString(4));
+            return json_array;
 
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        return null;
     }
 
-    public String getServer_address() {
-        return server_address;
+    public String getServerIP() {
+        return serverAddress;
     }
 
-    public int getServer_port() {
-        return server_port;
+    public int getServerPort() {
+        return serverPort;
     }
 
     public Request getRequest() {
@@ -71,8 +76,11 @@ public class Client {
     }
 
     static public void main(String[] args) {
-        Request request1 = new Request("1111","CREATE","USER","1234");
-        request1.setNewInfo(new HashMap<String,String>(){{
+        Request request;
+        Client c;
+
+        request = new Request("1111","CREATE","USER","1234");
+        request.setNewInfo(new HashMap<String,String>(){{
             put("username","hello.world");
             put("password","password123");
             put("firstName","Jordan");
@@ -80,11 +88,11 @@ public class Client {
             put("email","hello.world@gmail.com");
             put("admin","True");
         }});
-        Client c1_1 = new Client("127.0.0.1", 3920, request1);
-        c1_1.send();
+        c = new Client("127.0.0.1", 3920, request);
+        c.send();
 
-        Request request2 = new Request("1111","CREATE","USER","");
-        request2.setNewInfo(new HashMap<String,String>(){{
+        request = new Request("1111","CREATE","USER","");
+        request.setNewInfo(new HashMap<String,String>(){{
             put("username","newuser");
             put("password","passwd");
             put("firstName","Michael");
@@ -92,11 +100,11 @@ public class Client {
             put("email","foo.bar@gmail.com");
             put("admin","False");
         }});
-        Client c1_2 = new Client("127.0.0.1", 3920, request2);
-        c1_2.send();
+        c = new Client("127.0.0.1", 3920, request);
+        c.send();
 
-        Request request3 = new Request("1111","CREATE","USER","");
-        request3.setNewInfo(new HashMap<String,String>(){{
+        request = new Request("1111","CREATE","USER","");
+        request.setNewInfo(new HashMap<String,String>(){{
             put("username","something");
             put("password","abcABC123");
             put("firstName","Sallah");
@@ -104,11 +112,9 @@ public class Client {
             put("email","something@email.com");
             put("admin","True");
         }});
-        Client c1_3 = new Client("127.0.0.1", 3920, request3);
-        c1_3.send();
+        c = new Client("127.0.0.1", 3920, request);
+        c.send();
 
-        Request request;
-        Client c;
 
         request = new Request("0001","CREATE","ORGANIZATION","");
         request.setNewInfo(new HashMap<String,String>(){{

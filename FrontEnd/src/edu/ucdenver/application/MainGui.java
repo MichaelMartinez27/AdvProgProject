@@ -1,4 +1,4 @@
-package FrontEnd.src.edu.ucdenver.network;
+package FrontEnd.src.edu.ucdenver.application;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,12 +8,13 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainGui extends Application {
     double x,y = 0;
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("FrontEnd.src.edu.ucdenver.network.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("FrontEnd.src.edu.ucdenver.network.fxml")));
         Scene scene = new Scene(root);
         stage.initStyle(StageStyle.UNDECORATED);
 
