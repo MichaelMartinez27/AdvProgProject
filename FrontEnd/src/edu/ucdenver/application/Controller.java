@@ -1,5 +1,9 @@
-package FrontEnd.src.edu.ucdenver.network;
+package FrontEnd.src.edu.ucdenver.application;
 
+import FrontEnd.src.edu.ucdenver.application.MainGui;
+import FrontEnd.src.edu.ucdenver.network.Client;
+import FrontEnd.src.edu.ucdenver.network.Request;
+import FrontEnd.src.edu.ucdenver.network.fxmlLoader;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

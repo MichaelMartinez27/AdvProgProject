@@ -1,5 +1,6 @@
 package FrontEnd.src.edu.ucdenver.network;
 
+import FrontEnd.src.edu.ucdenver.application.MainGui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 
