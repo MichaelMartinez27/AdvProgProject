@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -29,6 +30,9 @@ public class Controller implements Initializable {
 
     @FXML
     private Label Menu;
+
+    @FXML
+    private BorderPane mainPane;
 
     @FXML
     private Label MenuClose;
@@ -145,6 +149,35 @@ public class Controller implements Initializable {
 
     @FXML
     private TextField signUpUserName;
+
+    //This is to switch scenes when the profile button is clicked
+    @FXML
+    private void handleButtonProfile(ActionEvent event){
+        fxmlLoader object = new fxmlLoader();
+        Pane view = object.getPage("Profile");
+        mainPane.setCenter(view);
+    }
+    //This is to switch scenes when the Users button is clicked
+    @FXML
+    private void handleButtonUsers(ActionEvent event){
+        fxmlLoader object = new fxmlLoader();
+        Pane view = object.getPage("Users");
+        mainPane.setCenter(view);
+    }
+    //This is to switch scenes when the Projects button is clicked
+    @FXML
+    private void handleButtonProjects(ActionEvent event){
+        fxmlLoader object = new fxmlLoader();
+        Pane view = object.getPage("Projects");
+        mainPane.setCenter(view);
+    }
+    //This is to switch scenes when the Organizations button is clicked
+    @FXML
+    private void handleButtonOrganizations(ActionEvent event){
+        fxmlLoader object = new fxmlLoader();
+        Pane view = object.getPage("Organizations");
+        mainPane.setCenter(view);
+    }
 
 //This is for the login button
     public  void LoginPaneShow(){
