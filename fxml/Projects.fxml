@@ -169,12 +169,12 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
                   <ListView fx:id="listOfProjects" layoutX="250.0" layoutY="14.0" prefHeight="251.0" prefWidth="210.0" />
-                  <Button fx:id="addProject" layoutX="57.0" layoutY="168.0" mnemonicParsing="false" onMouseClicked="#addProject" prefHeight="52.0" prefWidth="128.0" text="Add Project">
+                  <Button layoutX="57.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#addProject" prefHeight="52.0" prefWidth="128.0" text="Add Project">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="projectName" layoutX="22.0" layoutY="127.0" prefHeight="26.0" prefWidth="198.0" />
+                  <TextField fx:id="projectName" layoutX="22.0" layoutY="127.0" prefHeight="26.0" prefWidth="198.0" promptText="Project Name" />
                   <Button layoutX="283.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#removeProject" prefHeight="52.0" prefWidth="145.0" style="-fx-background-color: red;" text="Remove Project">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -185,6 +185,7 @@
                         <Image url="@../Icons/addfile.png" />
                      </image>
                   </ImageView>
+                  <TextField fx:id="projectDescription" alignment="TOP_LEFT" layoutX="22.0" layoutY="168.0" prefHeight="95.0" prefWidth="198.0" promptText="Project Description" />
                </children>
             </AnchorPane>
          </center>

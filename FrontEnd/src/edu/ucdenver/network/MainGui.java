@@ -13,7 +13,7 @@ public class MainGui extends Application {
     double x,y = 0;
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FrontEnd.src.edu.ucdenver.network.fxml"));
         Scene scene = new Scene(root);
         stage.initStyle(StageStyle.UNDECORATED);
 
