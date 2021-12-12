@@ -146,22 +146,20 @@ public class Controller implements Initializable {
     @FXML
     private TextField signUpUserName;
 
+//This is for the login button
     public  void LoginPaneShow(){
 
         loginPane.setVisible(true);
         signUpPane.setVisible(false);
     }
-
+//This is for the signup button
     public  void SignupPaneShow(){
 
         loginPane.setVisible(false);
         signUpPane.setVisible(true);
     }
 
-    public  void loginUser(ActionEvent event) throws IOException{
-        checkLogin();
-    }
-
+//This is to create a new user
     public  void createAccount(ActionEvent event) throws IOException{
 
         Request request3 = new Request("1111","CREATE","USER","");
@@ -178,6 +176,10 @@ public class Controller implements Initializable {
     }
 
 
+//This is to check if the login credentials are correct
+    public  void loginUser(ActionEvent event) throws IOException{
+        checkLogin();
+    }
     private  void checkLogin() throws IOException{
         MainGui mainGui = new MainGui();
         Request request = new Request("0003", "RETRIEVE", "USER", "ALL");
@@ -197,6 +199,8 @@ public class Controller implements Initializable {
         }
     }
 
+
+//This is to update user profile
     private void updateUserP (ActionEvent event) throws IOException{
         Request request3 = new Request("1111","UPDATE","USER","");
         request3.setNewInfo(new HashMap<String,String>(){{
@@ -261,7 +265,7 @@ public class Controller implements Initializable {
             });
         });
     }
-
+//This is to add projects
     @FXML
     public void addProject(MouseEvent event)
     {
@@ -273,7 +277,7 @@ public class Controller implements Initializable {
         Client c = new Client("127.0.0.1", 3920, request);
         c.send();
     }
-
+//This is to remove projects
     @FXML
     public void removeProject(javafx.scene.input.MouseEvent event) {
         int selectedID = listOfProjects.getSelectionModel().getSelectedIndex();
@@ -284,6 +288,7 @@ public class Controller implements Initializable {
             c.send();
         }
 
+    //This is to add Organizations
     @FXML
     public void addOrganization(MouseEvent event)
     {
@@ -295,7 +300,7 @@ public class Controller implements Initializable {
         Client c = new Client("127.0.0.1", 3920, request);
         c.send();
     }
-
+    //This is to Delete Organizations
     @FXML
     public void removeOrganization(MouseEvent event)
     {
@@ -308,7 +313,7 @@ public class Controller implements Initializable {
     }
 
 
-    //Addbutton on admins/members
+    //This is to add new member/admin
     @FXML
     void handleButtonAdd(ActionEvent event) {
         if(event.getSource()==btnAdd){
@@ -319,13 +324,15 @@ public class Controller implements Initializable {
                 put("firstName",String.valueOf(firstNameInput));
                 put("lastName",String.valueOf(lastNameInput));
                 put("email",String.valueOf(emailInput));
+                put("Type",String.valueOf(addType));
             }});
             Client c1_1 = new Client("127.0.0.1", 3920, request1);
             c1_1.send();
 
         }
     }
-//Delete users
+
+//This is to delete member/admin
     @FXML
     void handleButtonDelete(ActionEvent event){
         int selectedID = tableView.getSelectionModel().getSelectedIndex();
@@ -335,7 +342,7 @@ public class Controller implements Initializable {
         c1_1.send();
     }
 
-
+//This is dialog box for add new member/admin
     private void showAsDialog(String fxml)
     {
             try
