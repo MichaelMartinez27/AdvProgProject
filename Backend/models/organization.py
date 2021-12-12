@@ -13,8 +13,8 @@ class Organization:
     def __dict__(self):
         
         return {
-            "Name" : self.name,
-            "Id" : self.id
+            "name" : self.name,
+            "id" : self.id
         }
 
     def getId(self):

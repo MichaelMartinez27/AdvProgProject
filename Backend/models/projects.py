@@ -18,15 +18,15 @@ class Project:
 
     def __dict__(self):
         return {
-            "Id" : self.id,
-            "Title" : self.title,
-            "Description": self.description,
-            "Goals" : self.goals,
-            "Tasks" : self.tasks,
-            "Users Can Edit" : self.usersCanEdit,
-            "Users Can View" : self.usersCanView,
-            "Created Date": self.createdDate,
-            "Created By" : self.createdBy
+            "id" : self.id,
+            "title" : self.title,
+            "description": self.description,
+            "goals" : self.goals,
+            "tasks" : self.tasks,
+            "editors" : self.usersCanEdit,
+            "viewers" : self.usersCanView,
+            "createdDate": self.createdDate,
+            "createdBy" : self.createdBy
         }
 
     def getId(self):

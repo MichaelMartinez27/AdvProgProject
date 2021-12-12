@@ -1,5 +1,7 @@
-package FrontEnd.src.edu.ucdenver.network;
+package FrontEnd.src.edu.ucdenver.application;
 
+import FrontEnd.src.edu.ucdenver.network.Client;
+import FrontEnd.src.edu.ucdenver.network.Request;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,12 +14,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.lang.reflect.Member;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -162,8 +162,8 @@ public class Controller implements Initializable {
 //This is to create a new user
     public  void createAccount(ActionEvent event) throws IOException{
 
-        Request request3 = new Request("1111","CREATE","USER","");
-        request3.setNewInfo(new HashMap<String,String>(){{
+        Request request = new Request("1111","CREATE","USER","");
+        request.setNewInfo(new HashMap<String,String>(){{
             put("username",String.valueOf(signUpUserName));
             put("password",String.valueOf(signUpPassword));
             put("firstName",String.valueOf(signUpFirstName));
@@ -171,8 +171,8 @@ public class Controller implements Initializable {
             put("email",String.valueOf(signUpEmail));
             put("admin",String.valueOf(signUpType));
         }});
-        Client c1_3 = new Client("127.0.0.1", 3920, request3);
-        c1_3.send();
+        Client c = new Client("127.0.0.1", 3920, request);
+        c.send();
     }
 
 
@@ -202,16 +202,16 @@ public class Controller implements Initializable {
 
 //This is to update user profile
     private void updateUserP (ActionEvent event) throws IOException{
-        Request request3 = new Request("1111","UPDATE","USER","");
-        request3.setNewInfo(new HashMap<String,String>(){{
+        Request request = new Request("1111","UPDATE","USER","");
+        request.setNewInfo(new HashMap<String,String>(){{
             put("username",String.valueOf(userNameP));
             put("password",String.valueOf(createPasswordP));
             put("firstName",String.valueOf(firstNameP));
             put("lastName",String.valueOf(lastNameP));
             put("email",String.valueOf(emailP));
         }});
-        Client c1_3 = new Client("127.0.0.1", 3920, request3);
-        c1_3.send();
+        Client c = new Client("127.0.0.1", 3920, request);
+        c.send();
     }
 
 
@@ -318,16 +318,16 @@ public class Controller implements Initializable {
     void handleButtonAdd(ActionEvent event) {
         if(event.getSource()==btnAdd){
             showAsDialog("addNew");
-            Request request1 = new Request("1111","ADD","USER"," ");
-            request1.setNewInfo(new HashMap<String,String>(){{
+            Request request = new Request("1111","ADD","USER"," ");
+            request.setNewInfo(new HashMap<String,String>(){{
                 put("username", String.valueOf(userNameInput));
                 put("firstName",String.valueOf(firstNameInput));
                 put("lastName",String.valueOf(lastNameInput));
                 put("email",String.valueOf(emailInput));
                 put("Type",String.valueOf(addType));
             }});
-            Client c1_1 = new Client("127.0.0.1", 3920, request1);
-            c1_1.send();
+            Client c = new Client("127.0.0.1", 3920, request);
+            c.send();
 
         }
     }
@@ -337,9 +337,9 @@ public class Controller implements Initializable {
     void handleButtonDelete(ActionEvent event){
         int selectedID = tableView.getSelectionModel().getSelectedIndex();
         tableView.getItems().remove(selectedID);
-        Request request1 = new Request(" ","DELETE","USER"," ");
-        Client c1_1 = new Client("127.0.0.1", 3920, request1);
-        c1_1.send();
+        Request request = new Request(" ","DELETE","USER"," ");
+        Client c = new Client("127.0.0.1", 3920, request);
+        c.send();
     }
 
 //This is dialog box for add new member/admin

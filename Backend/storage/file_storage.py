@@ -115,19 +115,19 @@ class FileStorage:
         if self.user == "1111" or self._user_admin:
             if element == "USER":
                 createUser(element_id, element_info)
-                return f"user created: {element_id}"
+                return element_id
             elif element == "ORGANIZATION":
                 createOrganization(element_id, self.user, element_info)
-                return f"org created: {element_id}"
+                return element_id
             elif element == "PROJECT":
                 if createProject(element_id, element_info):
-                    return f"project created: {element_id}"
+                    return element_id
                 else:
                     raise AttributeError("organization does not exsist")
             elif element == "TASK":
                 return "task for project created"
             else:
-                raise AttributeError("element does not exsist")
+                raise AttributeError("element does not exist")
         else:
             raise PermissionError("user does not have permission to create element")
 
@@ -160,10 +160,18 @@ class FileStorage:
             
             """
             try:
+                org_info, org_users = None, None
+                org_full = {}
                 with open(f'{self.file_storage_dir}organizations/{org_id}/info.json',
                           mode="r",
                           encoding='utf-8') as file:
-                    return json.load(file)
+                    org_info = json.load(file)
+                with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                          mode="r",
+                          encoding='utf-8') as file:
+                    org_users = json.load(file)
+                org_info["users"] = org_users
+                return org_info
             except FileNotFoundError:
                 return {}
 
@@ -192,8 +200,7 @@ class FileStorage:
         elif element == "ORGANIZATION":
             org = getOrganization(element_uid)
             if org:
-                if self.user in org.get("editors", []) + org.get("viewers", []):
-                    return org
+                return org
             else:
                 raise NotImplementedError("orginization does not exsist")
         elif element == "USER" and (self.user == element_uid or self._user_admin):
@@ -234,25 +241,28 @@ class FileStorage:
             if org:
                 for key, val in org_update_info.items():
                     if key == "user":
-                        with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                        user_file = f'{self.file_storage_dir}organizations/{org_id}/users.json'
+                        with open(user_file,
                                   mode="r",
-                                  encoding="utf-8") as file:
-                            users = json.load(file)
+                                  encoding="utf-8") as file1:
+                            users = json.load(file1)
                             users.append(val)
-                            with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
-                                      mode="w",
-                                      encoding="utf-8") as file:
-                                json.dump(users, file)
+                            with open(user_file,
+                                      mode="w+",
+                                      encoding="utf-8") as file2:
+                                file2.write(json.dumps(users))  # issues with json.dump
+
                     elif key == "users":
-                        with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                        user_file = f'{self.file_storage_dir}organizations/{org_id}/users.json'
+                        with open(user_file,
                                   mode="r",
-                                  encoding="utf-8") as file:
-                            users = json.load(file)
+                                  encoding="utf-8") as file1:
+                            users = json.load(file1)
                             users += val
-                            with open(f'{self.file_storage_dir}organizations/{org_id}/users.json',
+                            with open(user_file,
                                       mode="w",
-                                      encoding="utf-8") as file:
-                                json.dump(users, file)
+                                      encoding="utf-8") as file2:
+                                json.dump(users, file2)
                     elif key != "organizationUID":
                         if type(val) == list:
                             org[key] = list(org.get(key, [])) + val
@@ -260,6 +270,7 @@ class FileStorage:
                             org[key] += [val]
                         else:
                             org[key] = val
+                del org["users"]
                 if self.create("ORGANIZATION", org_id, org):
                     return True
             return False
@@ -299,9 +310,11 @@ class FileStorage:
             else:
                 raise PermissionError("user does not have permission to update element")
         if element == "ORGANIZATION":
+            print(element_uid)
             org = self.retrieve("ORGANIZATION", element_uid)
+            print(org)
             if org:
-                if self.user in org.get("editors", []):
+                if self._user_admin:
                     if updateOrganization(element_uid, element_info):
                         return "organization updated"
                     raise NotImplementedError("could not update organization")
